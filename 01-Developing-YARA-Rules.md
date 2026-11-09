@@ -2,19 +2,21 @@
 
 ## Executive Summary
 
-This investigation focused on developing and improving YARA detection rules through static malware analysis. By examining malware samples, extracting meaningful strings, and validating existing detection logic, the investigation demonstrated how reliable malware-specific artifacts can be incorporated into YARA rules to improve detection accuracy while reducing false positives.
+This investigation focused on developing and improving YARA detection rules through static malware analysis. By examining malware samples, extracting meaningful strings, and inspecting existing detection logic, the investigation demonstrated how candidate malware-related artifacts can be identified and used to refine YARA detection signatures.
 
-## Challenge Context
+The analysis identified the DLL reference **TSMSISrv.dll** within **DirectX.dll** and correlated it with an incomplete string indicator in an existing APT17-related YARA rule. The available evidence supports identifying the required replacement string; successful execution of the modified rule and false-positive testing were not documented.
 
-The investigation was initiated after a malware analysis team identified an incomplete YARA detection rule that failed to correctly identify a suspicious Windows DLL. Analysts were tasked with performing static analysis of the malware sample, extracting reliable detection artifacts, and validating an existing YARA rule by replacing placeholder values with malware-specific indicators.
+## Investigation Context
 
-Using standard Linux utilities and YARA rule inspection, the investigation focused on identifying unique strings capable of improving detection accuracy while reducing false positives.
+The investigation was conducted in a controlled Hack The Box Academy environment using a provided Windows DLL sample and an existing APT17-related YARA rule containing an incomplete string indicator. The objective was to inspect the sample, identify a relevant DLL reference, and determine the appropriate replacement for the rule's placeholder.
+
+Using standard Linux utilities and YARA rule inspection, the investigation focused on identifying DLL-related strings that could support more specific detection logic.
 
 ## Background
 
 ### What is YARA? 
 
-YARA is a pattern-matching language designed to identify and classify malware based on textual, structural, and behavioral characteristics. It enables analysts to create detection rules that match specific strings, imported libraries, PE metadata, file characteristics, and other malware-specific artifacts.
+YARA is a pattern-matching language designed to identify and classify malware based on textual, structural, and binary characteristics. It enables analysts to create detection rules that match specific strings, imported libraries, PE metadata, file characteristics, and other malware-specific artifacts.
 
 Originally developed for malware research, YARA has become one of the most widely used technologies for malware detection, threat hunting, digital forensics, and incident response.
 
@@ -22,7 +24,7 @@ Originally developed for malware research, YARA has become one of the most widel
 
 Effective YARA rules allow defenders to detect known malware families, identify malware variants, and improve visibility across large malware repositories. Rather than relying solely on cryptographic hashes, YARA rules focus on stable malware characteristics that remain identifiable even when samples are recompiled or slightly modified.
 
-Well-designed rules significantly improve detection accuracy while minimizing false positives by using malware-specific indicators instead of generic strings.
+Well-designed rules combine sufficiently distinctive indicators with appropriate matching conditions. Detection quality depends on testing against relevant malicious and benign samples.
 
 ### Manual vs Automated Rule Development
 
@@ -55,12 +57,12 @@ Common artifacts used during YARA rule development include:
 | strings | Extract printable strings from malware samples |
 | grep | Filter relevant artifacts |
 | YARA | Malware detection and signature matching |
-| yarGen | Automated YARA rule generation |
-| dnSpy | .NET assembly inspection |
+
+**Scope note**: The documented commands in this investigation use **strings**, **grep**, and **cat**. YARA, yarGen, and dnSpy are relevant to the broader project, but their execution is not demonstrated in this section.
 
 ## Investigation Scope
 
-The investigation focused on analyzing a suspicious Windows DLL, extracting malware-specific artifacts, comparing those artifacts against an existing YARA rule, and improving the rule to correctly identify the analyzed malware sample.
+The investigation focused on analyzing a suspicious Windows DLL, extracting DLL-related artifacts, comparing those artifacts against an existing YARA rule, and identifying the string required to complete an existing rule indicator.
 
 ## Data Sources
 
@@ -69,8 +71,6 @@ The investigation focused on analyzing a suspicious Windows DLL, extracting malw
 | Malware Sample | Static malware analysis |
 | strings | String extraction |
 | YARA Rule | Detection logic validation |
-| yarGen | Automated rule generation |
-| PE Metadata | File characteristics |
 
 ## MITRE ATT&CK Mapping Background 
 
@@ -80,57 +80,38 @@ The investigation focused on analyzing a suspicious Windows DLL, extracting malw
 | Malware | T1587 |
 | Indicator Development | T1587.001 |
 
+**MITRE ATT&CK Scope**: This investigation documents defensive static analysis and YARA rule inspection. No attacker behavior was independently reconstructed from the sample, so no specific ATT&CK technique is assigned to the observed activity.
+
 ## Investigation Methodology 
 
 1. Analyze the malware sample.
 2. Extract meaningful strings.
-3. Identify malware-specific artifacts.
+3. Identify DLL-related artifacts.
 4. Compare extracted artifacts with the existing YARA rule.
-5. Replace weak indicators.
-6. Validate the updated detection logic.
+5. Identify the replacement for the incomplete string indicator..
+6. Document the proposed rule correction and identify the testing required to validate it.
 
 ## Investigation Overview 
 
-The investigation followed a structured malware analysis workflow designed to identify reliable detection artifacts for YARA rule development. Rather than relying on generic strings, analysts examined the malware sample, extracted unique DLL references, compared the findings against an existing YARA rule, and validated whether the rule accurately represented the analyzed malware.
+The investigation followed a structured malware analysis workflow designed to identify candidate detection artifacts for YARA rule development. Rather than relying on generic strings, the analysis examined the malware sample, extracted DLL references, compared the findings against an existing YARA rule, and identified an incomplete string indicator requiring correction.
 
-The overall investigation focused on determining:
+The investigation established a connection between a DLL reference extracted from the sample and a placeholder in the existing rule. The following sections document the commands, observed artifacts, and proposed detection logic refinement.
 
-- which malware-specific artifacts could be extracted,
-- whether the existing YARA rule contained incomplete indicators,
-- which artifact should replace the placeholder,
-- whether the updated rule correctly detected the malware sample.
+## Static Malware Analysis and YARA Rule Inspection
 
-## Investigation Exercise 
+**Analysis Objective**: Examine **DirectX.dll** for DLL-related strings and compare the extracted artifacts with the existing APT17-related YARA rule to identify an incomplete detection indicator.
 
-### Objective:
-
-Analyze the DirectX.dll malware sample and identify the DLL artifact required to complete an existing APT17 YARA rule.
-
-### Question:
-
-Perform string analysis on the following malware sample:
+### Artifacts Examined:
 
 `/home/htb-student/Samples/YARASigma/DirectX.dll`
 
-Next, inspect the following YARA rule:
-
 `/home/htb-student/Rules/yara/apt_apt17_mal_sep17_1.yar`
 
-Determine which DLL name replaces the placeholder (`X.dll`) so that the rule correctly identifies the malware sample.
-
-**Asswer format**
-
-`_.dll`
-
-Solution:
-
-`TSMSISrv.dll`
-
-## Investigation Query #1 
+## 1. DLL String Extraction
 
 ### Purpose: 
 
-Identify unique DLL-related strings within the malware sample that can be used as reliable detection artifacts for YARA rule development.
+Identify DLL-related strings within the sample that may be relevant to YARA rule development.
 
 ### Command:
 
@@ -144,15 +125,17 @@ strings /home/htb-student/Samples/YARASigma/DirectX.dll | grep dll
 | Malware Sample | `DirectX.dll` |
 | Extracted DLL Artifact | `TSMSISrv.dll` | 
 
-### Query Analysis:
+### Analysis:
 
-The strings utility extracts printable strings from the malware sample, while grep dll filters output to identify DLL-related references. During the analysis, the unique DLL artifact TSMSISrv.dll was identified, providing a reliable malware-specific indicator suitable for inclusion in a YARA detection rule.
+The strings utility extracts printable strings from the malware sample, while grep dll filters output to identify DLL-related references. During the analysis, the DLL reference TSMSISrv.dll was identified, providing a candidate string indicator for comparison with the existing YARA rule.
 
-## Investigation Query #2
+The presence of this string in the sample does not independently establish that the referenced DLL was loaded or executed, nor does it demonstrate that the string is exclusive to the malware.
+
+## 2. Existing YARA Rule Inspection
 
 ### Purpose:
 
-Validate the existing YARA rule and identify placeholders requiring replacement with artifacts extracted from the malware sample.
+Inspect the existing YARA rule and identify placeholders requiring replacement with artifacts extracted from the malware sample.
 
 ### Command:
 
@@ -167,26 +150,15 @@ cat /home/htb-student/Rules/yara/apt_apt17_mal_sep17_1.yar | grep dll
 | Placeholder Identified | `X.dll` |
 | Replacement Value | `TSMSISrv.dll` |
 
-### Query Analysis:
+### Analysis:
 
-The existing YARA rule was inspected to locate DLL-related detection logic. Analysis revealed that the rule contained the placeholder X.dll, indicating an incomplete detection artifact. By replacing the placeholder with the malware-specific string TSMSISrv.dll extracted during the previous investigation step, the rule can accurately detect the analyzed malware sample while improving detection specificity.
+The existing YARA rule was inspected to locate DLL-related detection logic. Analysis revealed that the rule contained the placeholder X.dll, indicating an incomplete detection artifact. By replacing the placeholder with the sample-derived string TSMSISrv.dll extracted during the previous investigation step, the rule could be updated to reference the observed DLL artifact. A subsequent YARA scan would be required to confirm whether the modified rule matches the sample.
 
 ## Investigation Findings 
 
-Static analysis of the malware sample identified the unique DLL reference `TSMSISrv.dll`, which represented a malware-specific artifact suitable for YARA detection. Comparison with the existing APT17 YARA rule revealed that the rule contained the placeholder `X.dll` instead of the actual DLL name.
+Static analysis of the malware sample identified the DLL reference `TSMSISrv.dll`, which represented candidate detection artifact. Comparison with the existing APT17 YARA rule revealed that the rule contained the placeholder `X.dll` instead of the actual DLL name.
 
-Replacing the placeholder with `TSMSISrv.dll` significantly improved the specificity of the detection rule, allowing it to correctly identify the analyzed malware sample while reducing the likelihood of false positives caused by generic indicators.
-
-## Investigation Workflow
-
-The investigation followed a structured workflow to improve the existing YARA rule:
-
-1. Analyze the malware sample (`DirectX.dll`) using static string analysis.
-2. Filter extracted strings to identify DLL-related artifacts.
-3. Identify the unique malware-specific DLL reference (`TSMSISrv.dll`).
-4. Compare the extracted artifact with the existing YARA rule.
-5. Replace the placeholder (`X.dll`) with the identified DLL artifact.
-6. Validate that the updated rule correctly detects the malware sample.
+The analysis identified **TSMSISrv.dll** as the appropriate replacement for the incomplete string indicator. The documented evidence establishes the string extraction and rule inspection steps, but does not include the modified rule, a successful YARA match, or testing against benign files. Detection effectiveness and false-positive behavior therefore remain unverified.
 
 ## YARA Detection Engineering Concepts
 
