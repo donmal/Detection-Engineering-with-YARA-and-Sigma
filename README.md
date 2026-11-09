@@ -1,4 +1,5 @@
 # Detection Engineering with YARA and Sigma
+| Hack-the-Box Academy |
 
 ## Overview
 
