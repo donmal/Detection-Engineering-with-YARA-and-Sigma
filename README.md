@@ -3,9 +3,11 @@
 
 ## Overview
 
-This project documents a series of practical Detection Engineering investigations focused on developing, validating, and operationalizing detection logic using **YARA** and **Sigma**. Through hands-on malware analysis, memory forensics, Windows Event Log analysis, and offline threat hunting, the project demonstrates how detection rules can be created, improved, translated, and validated across multiple platforms and tools.
+This project documents a series of practical Detection Engineering investigations focused on developing, validating, and testing detection logic using **YARA** and **Sigma**. Through hands-on malware analysis, memory forensics, Windows Event Log analysis, and offline threat hunting, the project demonstrates how detection rules can be created, improved, translated, and validated across multiple platforms and tools.
 
 The investigations cover both **signature-based detection** using YARA and **behavior-based detection** using Sigma, providing practical experience with static malware analysis, Windows telemetry, detection engineering, and threat hunting workflows.
+
+The investigations were conducted in controlled training environments using provided malware samples, memory dumps, and Windows event logs. Findings reflect practical detection development and validation rather than production deployment.
 
 ---
 
@@ -87,7 +89,7 @@ The primary objectives of this project are to:
 
 Developing and improving YARA rules through static malware analysis by extracting meaningful strings and replacing weak placeholders with malware-specific detection artifacts.
 
-**Topics Covered**
+**Investigation Focus**
 
 - Manual YARA rule development
 - PE inspection
@@ -101,7 +103,7 @@ Developing and improving YARA rules through static malware analysis by extractin
 
 Using YARA to detect malware both on disk and inside running process memory while improving an existing YARA rule through hexadecimal string analysis.
 
-**Topics Covered**
+**Investigation Focus**
 
 - Process memory scanning
 - Hexadecimal pattern generation
@@ -115,7 +117,7 @@ Using YARA to detect malware both on disk and inside running process memory whil
 
 Applying YARA and Volatility to investigate memory dumps, identify ransomware artifacts, and attribute malicious behavior through memory forensics.
 
-**Topics Covered**
+**Investigation Focus**
 
 - Volatility
 - yarascan
@@ -129,7 +131,7 @@ Applying YARA and Volatility to investigate memory dumps, identify ransomware ar
 
 Translating Sigma rules into executable PowerShell detections and validating them against Windows Event Logs.
 
-**Topics Covered**
+**Investigation Focus**
 
 - Sigma rule development
 - sigmac
@@ -143,7 +145,7 @@ Translating Sigma rules into executable PowerShell detections and validating the
 
 Executing Sigma rules using Chainsaw to perform offline threat hunting against Windows Event Logs.
 
-**Topics Covered**
+**Investigation Focus**
 
 - Chainsaw
 - Event ID 4104
@@ -157,7 +159,7 @@ Executing Sigma rules using Chainsaw to perform offline threat hunting against W
 
 Translating Sigma rules into Splunk SPL and validating detections using Windows telemetry ingested into Splunk.
 
-**Topics Covered**
+**Investigation Focus**
 
 - Splunk SPL
 - Sigma translation
@@ -169,15 +171,15 @@ Translating Sigma rules into Splunk SPL and validating detections using Windows 
 
 ### 07 – Detection Engineering Capstone
 
-A practical capstone assessment combining YARA rule development with Sigma-based threat hunting to simulate real-world Detection Engineering tasks.
+An integrated detection engineering investigation combining YARA rule development, .NET malware analysis, and Sigma-based threat hunting to investigate suspicious artifacts and validate detection logic in a controlled environment.
 
-**Assessment Part I**
+**YARA Investigation**
 
 - .NET malware analysis
 - Seatbelt detection
 - YARA rule improvement
 
-**Assessment Part II**
+**Sigma Investigation**
 
 - Chainsaw hunting
 - Sigma rule execution
@@ -196,7 +198,7 @@ The project demonstrates detections mapped to multiple ATT&CK tactics and techni
 
 ### Defense Evasion
 
-- T1070 – Indicator Removal on Host
+- T1562.001 – Impair Defenses: Disable or Modify Tools (where Windows Defender tampering is evidenced)
 
 ### Discovery
 
@@ -211,11 +213,9 @@ The project demonstrates detections mapped to multiple ATT&CK tactics and techni
 
 - T1490 – Inhibit System Recovery
 
-### Malware
+### Detection Methodologies
 
-- Signature-based malware detection
-- Behavioral malware detection
-- Memory-resident malware detection
+In addition to ATT&CK technique mapping, the investigations demonstrate signature-based malware detection, behavior-based detection, and memory-resident artifact identification. These are detection methodologies rather than ATT&CK tactics or techniques.
 
 ---
 
@@ -240,25 +240,9 @@ Throughout the project, the following concepts are demonstrated:
 
 ---
 
-## Repository Structure
-
-```
-Detection-Engineering-with-YARA-and-Sigma/
-│
-├── 01-Developing-YARA-Rules.md
-├── 02-Hunting-Evil-with-YARA-Windows.md
-├── 03-Hunting-Evil-with-YARA-Linux.md
-├── 04-Developing-Sigma-Rules.md
-├── 05-Hunting-Evil-with-Sigma-Chainsaw.md
-├── 06-Hunting-Evil-with-Sigma-Splunk.md
-├── 07-Detection-Engineering-Capstone.md
-│
-└── README.md
-```
-
----
-
 ## Key Takeaways
 
-This project demonstrates how Detection Engineering extends beyond writing individual detection rules. Effective detection requires understanding malware behavior, selecting reliable detection artifacts, validating rules against real telemetry, and continuously refining detection logic across multiple platforms. By combining YARA, Sigma, Chainsaw, Splunk, and memory forensics, the investigations illustrate practical workflows used by SOC analysts and Detection Engineers to identify malware, validate detections, and improve defensive capabilities within enterprise environments.
+This project demonstrates how Detection Engineering extends beyond writing individual detection rules. Effective detection requires understanding malware behavior, selecting reliable detection artifacts, validating rules against real telemetry, and continuously refining detection logic across multiple platforms. 
+
+By combining YARA, Sigma, Chainsaw, Splunk, and memory forensics, the investigations illustrate practical workflows used by SOC analysts and Detection Engineers to identify malware, validate detections, and improve defensive capabilities through structured, hands-on investigations in controlled lab environments.
 
