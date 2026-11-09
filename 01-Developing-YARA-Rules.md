@@ -175,76 +175,39 @@ Manual YARA rules are built from:
 •	entropy
 •	malware-specific artifacts
 
-### Example: UPX Detection
-
-rule UPX_packed_executable
-{
-    meta:
-        description = "Detects UPX-packed executables"
-
-    strings:
-        $string_1 = "UPX0"
-        $string_2 = "UPX1"
-        $string_3 = "UPX2"
-
-    condition:
-        all of them
-}
-
-### Example: APT17 / ZoxPNG Detection
-
-Important detection ideas:
-
-•	suspicious HTTP strings
-•	specific User-Agent
-•	unique URL patterns
-•	PE imphash
-•	file size constraints
-•	imported DLLs
-
-### Example: Neuron / Turla Detection
-
-Detection based on .NET artifacts:
-
-StorageUtils
-WebServer
-StorageFile
-StorageScript
-ServerConfig
-CommandScript
-ExecCMD
-EncryptScript
-KillOldThread
-
-### Example: Stonedrill Detection
-
-Detection based on:
-
-•	PE resource inspection
-•	high entropy resource section
-•	resource ID 101
-•	file enumeration APIs
-•	unsigned PE file characteristics
+These artifacts can be combined into detection conditions to improve rule specificity. Their reliability depends on how distinctive they are and whether the resulting rule is validated against representative samples.
 
 ## Detection Logic
 
 ### Suspicious DLL Artifact 
 
-The DLL reference `TSMSISrv.dll` was identified through static string analysis of the malware sample. Because the string is specific to the analyzed malware and does not represent a common Windows component, it serves as a high-confidence detection artifact suitable for inclusion in a YARA rule. Malware-specific DLL references generally provide greater detection accuracy than generic strings while reducing the likelihood of false positives.
+The DLL reference `TSMSISrv.dll` was identified through static string analysis of the malware sample. 
+
+The extracted string represents a candidate detection indicator relevant to the existing YARA rule. Its presence in the sample provides evidence for the proposed rule correction, although additional testing would be required to establish its uniqueness and reliability across malicious and benign files.
 
 ### Rule Improvement 
 
-Inspection of the existing YARA rule revealed that the expected DLL artifact had been replaced with the placeholder `X.dll`, preventing the rule from correctly identifying the malware sample. Replacing the placeholder with the extracted artifact (`TSMSISrv.dll`) completed the detection logic and significantly improved the specificity and effectiveness of the rule.
+Inspection of the existing YARA rule revealed that the expected DLL artifact had been replaced with the placeholder `X.dll`. 
+
+This indicated that the rule contained an incomplete string indicator requiring correction.
+
+Replacing the placeholder with the extracted artifact (`TSMSISrv.dll`) was identified as the appropriate modification based on the sample analysis. The documented commands establish the relationship between the extracted string and the rule placeholder, but do not demonstrate a successful YARA scan after modification.
 
 ### Malware-specific Detection
 
-Effective YARA rules should be based on stable malware-specific artifacts rather than generic indicators that may appear in legitimate software. During this investigation, the extracted DLL reference (`TSMSISrv.dll`) represented a reliable malware-specific indicator that could be combined with additional characteristics such as PE metadata, imported functions, imphash values, and entropy analysis to produce more robust detection logic while minimizing false positives.
+Effective YARA rules should be based on stable malware-specific artifacts rather than generic indicators that may appear in legitimate software. 
 
-### Detection Specificity
+During this investigation, the extracted DLL reference ( TSMSISrv.dll ) represented candidate detection indicator that could be combined with additional characteristics such as PE metadata, imported functions, imphash values and entropy analysis to produce more robust detection logic after appropriate testing and validation.
 
-Reliable YARA rules balance detection coverage with specificity. Replacing generic placeholders with validated malware artifacts reduces false positives while increasing confidence that matched files belong to the intended malware family. This investigation demonstrated how small improvements to rule content can significantly strengthen operational malware detection.
+### Detection Validation and Limitations
 
-## IOC Summary
+Reliable YARA rules balance detection coverage with specificity. 
+
+The investigation identified a more relevant string for the existing rule, but did not document a completed YARA execution or false-positive assessment. Further validation would require scanning the reference sample, reviewing the full rule conditions, and testing the rule against unrelated malicious and benign files.
+
+The extracted string should therefore be treated as a candidate detection artifact rather than a fully validated malware signature.
+
+## Investigation Artifacts and Candidate IOC 
 
 | IOC Type | Value |
 |-----------|-------|
@@ -254,11 +217,7 @@ Reliable YARA rules balance detection coverage with specificity. Replacing gener
 | Sample Directory | `/home/htb-student/Samples/YARASigma` |
 | Rule Directory | `/home/htb-student/Rules/yara` |
 
-## Placeholder Screenshots
-
-Figure 1 - dnSpy .NET Analysis Example
-Figure 2 - strings DirectX.dll | grep dll
-Figure 3 - apt_apt17_mal_sep17_1.yar DLL Placeholder
+**Note**: The table contains both investigation artifacts and a candidate detection indicator. The local sample and rule paths are not themselves indicators of compromise. The extracted DLL reference requires additional corroboration before being treated as a high-confidence IOC.
 
 ## Lessons Learned
 
@@ -266,20 +225,16 @@ Figure 3 - apt_apt17_mal_sep17_1.yar DLL Placeholder
 |---------|-------------|
 | String Analysis | Static string analysis is often the first step in identifying malware-specific artifacts suitable for YARA rule development. |
 | Malware-specific Artifacts | High-quality YARA rules should prioritize unique malware-specific indicators rather than generic strings commonly found in legitimate software. |
-| Rule Validation | Existing YARA rules should be validated against analyzed malware samples to ensure placeholders and incomplete indicators are replaced with accurate detection artifacts. |
-| Automated Rule Generation | Tools such as **yarGen** can significantly accelerate rule creation; however, manually reviewing and refining generated rules remains essential for reducing false positives. |
-| Detection Quality | Combining strings with PE metadata, imported DLLs, imphash values, .NET artifacts, and entropy analysis produces more reliable and resilient YARA detection rules. |
-
-## MITRE ATT&CK Mapping
-
-| Tactic | Technique | ATT&CK ID | Investigation Relevance |
-|--------|-----------|-----------|-------------------------|
-| Resource Development | Develop Capabilities: Malware | T1587 | Development and improvement of malware detection signatures |
-| Resource Development | Develop Capabilities: Malware | T1587.001 | Creation and refinement of YARA detection rules |
-| Defense Evasion | Obfuscated/Compressed Files and Information | T1027 | Detection of packed or obfuscated malware using YARA signatures |
-| Defense Evasion | Software Packing | T1027.002 | Identification of packed executables through static artifacts such as UPX strings |
+| Rule Validation | Inspecting existing rules can identify incomplete indicators, but successful detection must be verified through rule execution and testing against representative samples |
+| Detection Quality | Combining distinctive strings with additional PE characteristics can strengthen detection logic, provided the final rule is tested for detection coverage and false positives. |
 
 ## Conclusion 
 
-This investigation demonstrated how static malware analysis can be leveraged to develop and improve YARA detection rules. By extracting malware-specific artifacts, validating existing detection logic, and replacing incomplete placeholders with reliable indicators, analysts can significantly improve the accuracy and effectiveness of malware detection while reducing false positives.
-The investigation also highlighted the importance of combining automated rule generation with manual analysis, ensuring that YARA rules remain both resilient and maintainable. Effective YARA rule development relies on selecting stable malware characteristics—including unique strings, imported DLLs, PE metadata, imphash values, and .NET artifacts—to produce high-confidence signatures suitable for malware hunting, threat detection, and incident response.
+This investigation demonstrated how static malware analysis can be leveraged to support the refinement of YARA detection rules. 
+
+By extracting DLL-related strings from **DirectX.dll** and inspecting the existing APT17-related YARA rule, the investigation identified **TSMSISrv.dll** as the appropriate replacement for an incomplete string indicator.
+
+The findings demonstrate the value of correlating sample-derived artifacts with existing detection logic. However, successful rule matching and false-positive performance were not verified in the documented evidence.
+
+The investigation reinforces the importance of selecting meaningful detection indicators, reviewing rule conditions, and validating proposed changes before considering a YARA signature suitable for operational use.
+
