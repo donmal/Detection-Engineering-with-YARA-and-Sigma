@@ -125,6 +125,10 @@ strings /home/htb-student/Samples/YARASigma/DirectX.dll | grep dll
 | Malware Sample | `DirectX.dll` |
 | Extracted DLL Artifact | `TSMSISrv.dll` | 
 
+### Figure 1 - DLL String Extraction 
+
+![Figure 1 - DLL String Extraction](../images/developing-yara-rules/dll-string-extraction.png)
+
 ### Analysis:
 
 The strings utility extracts printable strings from the malware sample, while grep dll filters output to identify DLL-related references. During the analysis, the DLL reference TSMSISrv.dll was identified, providing a candidate string indicator for comparison with the existing YARA rule.
@@ -149,6 +153,10 @@ cat /home/htb-student/Rules/yara/apt_apt17_mal_sep17_1.yar | grep dll
 | YARA Rule | `apt_apt17_mal_sep17_1.yar` |
 | Placeholder Identified | `X.dll` |
 | Replacement Value | `TSMSISrv.dll` |
+
+### Figure 2 - Existing YARA Rule Inspection 
+
+![Figure 2 - Existing YARA Rule Inspection](../images/developing-yara-rules/existing-yara-rule-inspection.png)
 
 ### Analysis:
 
