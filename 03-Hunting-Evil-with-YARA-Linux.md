@@ -75,6 +75,10 @@ vol.py -f /home/htb-student/MemoryDumps/compromised_system.raw yarascan -U "vssa
 | Process Identified | `@WanaDecryptor@` |
 | Malware Family | WannaCry / Wana Decrypt0r |
 
+### Figure 5 - Volatility YARA Memory Scan 
+
+
+
 ### Analysis:
 
 The `yarascan` plugin searched the memory image for the string `vssadmin`, a Windows utility that can be used to manage or delete Volume Shadow Copies. 
