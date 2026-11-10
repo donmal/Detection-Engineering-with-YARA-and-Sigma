@@ -112,6 +112,10 @@ Detection frequently relies on identifying distinctive .NET class names and othe
 
 **Rule Variable**: '$class2'
 
+### Figure 12 - Seatbelt.NET Assembly Analysis 
+
+![Figure 1 - Seatbelt .NET Assembly Analysis](/images/detection-engineering-capstone/capstone-seatbelt-dnspy-analysis.png)
+
 ## YARA Rule Validation
 
 ### Purpose
@@ -130,6 +134,10 @@ yara64.exe .\seatbelt.yar C:\Samples\YARASigma\
 | Malware Sample | `Seatbelt.exe` |
 | Missing Class | `LsaWrapper` |
 | Detection Status | Successful — reported match against the supplied sample |
+
+### Figure 13 - Successful YARA Rule Valdiation 
+
+![Figure 2 - Successful YARA Rule Validation](/images/detection-engineering-capstone/capstone-seatbelt-yara-validation.png)
 
 ### Analysis
 
@@ -223,6 +231,10 @@ The relative mapping path '.\mappings\sigma-event-logs-all.yml' assumes that the
 | Event ID | `4104` |
 | Detection | Shadow Copy Deletion — suspicious script block content |
 | ScriptBlock ID | `faaeba08-01f0-ba48-bd65-b24afd28` |
+
+### Figure 14 - Chainsaw Shadow Copy Deletion Detection
+
+![Figure 3 - Chainsaw Shadow Copy Deletion Detection](/images/detection-engineering-capstone/capstone-chainsaw-shadowcopy-detection.png)
 
 ### Analysis
 
