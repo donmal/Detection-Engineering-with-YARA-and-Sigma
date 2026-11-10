@@ -109,6 +109,10 @@ Execute the Sigma rule against the offline EVTX log using Chainsaw.
 cd C:\Tools\chainsaw\
 .\chainsaw_x86_64-pc-windows-msvc.exe hunt C:\Events\YARASigma\lab_events_5.evtx -s C:\Tools\chainsaw\sigma\rules\windows\powershell\powershell_script\posh_ps_win_defender_exclusions_added.yml --mapping .\mappings\sigma-event-logs-all.yml
 
+### Figure 9 - Chainsaw Sigma Rule Execution
+
+![Figure 1 - Chainsaw Sigma Rule Execution](/images/hunting-evil-with-sigma-chainsaw/chainsaw-sigma-rule-execution.png)
+
 ### Results:
 
 | Field | Value |
@@ -120,6 +124,9 @@ cd C:\Tools\chainsaw\
 | PowerShell Command | 	Set-MpPreference -ExclusionPath |
 | Excluded Directory | 	C:\document\virus\ |
 
+### Figure 10 - Defender Exclusion Detection Results 
+
+![Figure 2 - Defender Exclusion Detection Results](/images/hunting-evil-with-sigma-chainsaw/chainsaw-defender-exclusion-detection.png)
 
 ### Analysis:
 
