@@ -118,6 +118,10 @@ python sigmac -t splunk C:\Rules\sigma\file_event_win_app_dropping_archive.yml -
 | Translation Tool | `sigmac` |
 | Output Format | Splunk SPL |
 
+### Figure 11 - Sigma-to-Splunk SPL Translation 
+
+![Figure 1 - Sigma-to-Splunk SPL Translation](images/hunting-evil-with-sigma-splunk/sigma-to-splunk-spl-translation.png)
+
 ### Analysis
 
 The sigmac utility translated the Sigma rule into Splunk Search Processing Language (SPL), producing a query capable of identifying archive files created by processes specified in the rule within indexed Windows telemetry.
