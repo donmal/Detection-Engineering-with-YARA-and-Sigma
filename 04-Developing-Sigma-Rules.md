@@ -126,6 +126,10 @@ The correction replaces **$*** with **$_**, the PowerShell pipeline variable rep
 | Event IDs | `1006`, `1015`, `1116`, `1117` |
 | Malicious Driver | `mimidrv.sys` |
 
+### Figure 7 - Sigma Rule Translation and Defender Event Analysis
+
+![Figure 1 - Sigma Rule Translation and Defender Event Analysis](/images/developing-sigma-rules/sigma-defender-event-analysis.png)
+
 ### Analysis: 
 
 The translated PowerShell query filtered Windows Defender events associated with malware detection and remediation. Review of the event messages revealed that Microsoft Defender had identified the malicious driver mimidrv.sys.
@@ -141,6 +145,10 @@ Analysis of the matching events revealed Defender-reported threat activity, incl
 The investigation demonstrated how Sigma rules can be translated and applied using offline Windows event logs.
 
 The primary confirmed finding is the presence of **mimidrv.sys** in the Defender detection messages. Additional endpoint telemetry would be needed to determine whether the driver was executed or associated with other attacker actions.
+
+### Figure 8 - Malicious Driver Identification 
+
+![Figure 2 - Malicious Driver Identification](/images/developing-sigma-rules/sigma-mimidrv-driver-detection.png)
 
 ## Detection Logic
 
