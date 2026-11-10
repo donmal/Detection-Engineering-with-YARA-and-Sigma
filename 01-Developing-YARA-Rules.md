@@ -127,7 +127,7 @@ strings /home/htb-student/Samples/YARASigma/DirectX.dll | grep dll
 
 ### Figure 1 - DLL String Extraction 
 
-![Figure 1 - DLL String Extraction](../images/developing-yara-rules/dll-string-extraction.png)
+![Figure 1 - DLL String Extraction](/images/developing-yara-rules/dll-string-extraction.png) 
 
 ### Analysis:
 
@@ -156,7 +156,7 @@ cat /home/htb-student/Rules/yara/apt_apt17_mal_sep17_1.yar | grep dll
 
 ### Figure 2 - Existing YARA Rule Inspection 
 
-![Figure 2 - Existing YARA Rule Inspection](../images/developing-yara-rules/existing-yara-rule-inspection.png)
+![Figure 2 - Existing YARA Rule Inspection](/images/developing-yara-rules/existing-yara-rule-inspection.png) 
 
 ### Analysis:
 
