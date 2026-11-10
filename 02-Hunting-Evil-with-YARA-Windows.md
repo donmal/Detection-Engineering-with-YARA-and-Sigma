@@ -96,7 +96,7 @@ Open the malware sample in **HxD** and search for:
 
 ### Figure 3 - Hexadecimal String Extraction 
 
-![Figure 1 - Hexadecimal String Extraction](https://raw.githubusercontent.com/donakropoli/Detection-Engineering-with-YARA-and-Sigma/main/images/hunting-evil-with-yara-windows/yara-sandbox-hex-extraction.png)
+![Figure 1 - Hexadecimal String Extraction](/images/hunting-evil-with-yara-windows/yara-sandbox-hex-extraction.png)
 
 ### Query Analysis:
 
@@ -134,7 +134,7 @@ Get-Process | ForEach-Object {
 
 ### Figure 4 - YARA Process Memory Scanning
 
-![Figure 3 - YARA Process Memory Scanning](https://raw.githubusercontent.com/donakropoli/Detection-Engineering-with-YARA-and-Sigma/main/images/hunting-evil-with-yara-windows/yara-process-memory-scanning.png)
+![Figure 3 - YARA Process Memory Scanning](/images/hunting-evil-with-yara-windows/yara-process-memory-scanning.png)
 
 ### Analysis: 
 
@@ -167,7 +167,7 @@ rule shell_detected
 
 ### Figure 5 - YARA Rule Definition 
 
-![Figure 2 - YARA Rule Definition](https://raw.githubusercontent.com/donakropoli/Detection-Engineering-with-YARA-and-Sigma/main/images/hunting-evil-with-yara-windows/yara-shell-detector-rule.png)
+![Figure 2 - YARA Rule Definition](/images/hunting-evil-with-yara-windows/yara-shell-detector-rule.png)
 
 ## Detection Logic
 
