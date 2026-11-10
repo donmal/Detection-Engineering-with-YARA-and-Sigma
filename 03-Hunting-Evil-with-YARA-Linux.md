@@ -77,7 +77,7 @@ vol.py -f /home/htb-student/MemoryDumps/compromised_system.raw yarascan -U "vssa
 
 ### Figure 5 - Volatility YARA Memory Scan 
 
-
+![Figure 1 - Volatility YARA Memory Scan](/images/hunting-evil-with-yara-linux/volatility-yara-memory-scan.png)
 
 ### Analysis:
 
