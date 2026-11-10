@@ -94,6 +94,10 @@ Open the malware sample in **HxD** and search for:
 | Hexadecimal Representation | `53 61 6E 64 62 6F 78 20 64 65 74 65 63 74 65 64` |
 | Continuous Hexadecimal Representation | `53616E64626F78206465746563746564` |
 
+### Figure 3 - Hexadecimal String Extraction 
+
+![Figure 1 - Hexadecimal String Extraction](https://raw.githubusercontent.com/donakropoli/Detection-Engineering-with-YARA-and-Sigma/main/images/hunting-evil-with-yara-windows/yara-sandbox-hex-extraction.png)
+
 ### Query Analysis:
 
 The malware sample contained the string **"Sandbox detected"**, which represents a potential sandbox-awareness or anti-analysis indicator. After locating the string within the executable, its hexadecimal byte sequence was extracted and converted into the format required by the YARA rule. 
@@ -128,6 +132,10 @@ Get-Process | ForEach-Object {
 
 **Evidence limitation**: The table describes the scanning configuration rather than the actual scan results. No matching rule name, PID, or YARA output was provided in the write-up.
 
+### Figure 4 - YARA Process Memory Scanning
+
+![Figure 3 - YARA Process Memory Scanning](https://raw.githubusercontent.com/donakropoli/Detection-Engineering-with-YARA-and-Sigma/main/images/hunting-evil-with-yara-windows/yara-process-memory-scanning.png)
+
 ### Analysis: 
 
 The PowerShell command enumerates running processes using **Get-Process** and passes each process ID to **yara64.exe** together with the specified YARA rule. This provides a method for scanning accessible process memory for matching indicators.
@@ -157,6 +165,9 @@ rule shell_detected
 ```
 **Important**: The example above only illustrates a valid hexadecimal string definition. It does not reproduce the original **$domain and $sandbox** condition. If the actual rule requires both indicators, the **$sandbox** pattern alone is insufficient to trigger a match.
 
+### Figure 5 - YARA Rule Definition 
+
+![Figure 2 - YARA Rule Definition](https://raw.githubusercontent.com/donakropoli/Detection-Engineering-with-YARA-and-Sigma/main/images/hunting-evil-with-yara-windows/yara-shell-detector-rule.png)
 
 ## Detection Logic
 
